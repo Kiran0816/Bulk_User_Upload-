@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bulk User Upload</title>
+</head>
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    h1 {
+        color: #333;
+        text-align: center;
+        margin-top: 50px;
+    }
+
+    form {
+        max-width: 400px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    label {
+        display: block;
+        margin-bottom: 10px;
+        font-weight: bold;
+    }
+
+    input {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 20px;
+        box-sizing: border-box;
+    }
+
+    button {
+        background-color: #4caf50;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #45a049;
+    }
+
+    #messages {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        #success-message {
+            color: green;
+        }
+
+        #error-message {
+            color: red;
+        }
+
+        p {
+            margin: 0;
+        }
+</style>
+
+<body>
+    <h1>Bulk User Upload</h1>
+
+    <form action="/api/upload/users" method="post" enctype="multipart/form-data">
+        <label for="file">Choose Excel File:</label>
+        <input type="file" name="file" id="file" accept=".xlsx">
+        <button type="submit">Upload Users</button>
+    </form>
+
+    <!-- Download template button -->
+    <form action="/api/download/template" method="get">
+        <button type="submit">Download Template</button>
+    </form>
+
+      <!-- Display success and error messages -->
+      <div id="messages">
+        <p id="success-message"></p>
+        <p id="error-message"></p>
+    </div>
+
+    <script>
+        // Function to handle form submission and display messages
+        document.querySelector('form').addEventListener('submit', async function (event) {
+            event.preventDefault();
+
+            const formData = new FormData(this);
+            const response = await fetch('/api/upload/users', {
+                method: 'POST',
+                body: formData,
+            });
+
+            const result = await response.text();  // Parse the response as text
+
+            // Update the messages div with the response
+            const messagesDiv = document.getElementById('messages');
+            messagesDiv.innerHTML = result;
+        });
+    </script>
+</body>
+
+</html>

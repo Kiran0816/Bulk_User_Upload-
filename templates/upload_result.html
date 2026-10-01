@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bulk User Upload Result</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        #result-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            margin-top: 0;
+        }
+
+        p {
+            margin: 10px 0;
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .success {
+            color: green;
+        }
+
+        .partial-success {
+            color: orange;
+        }
+
+        .errors {
+            color: red;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div id="result-container">
+        <h1>Bulk User Upload Result</h1>
+
+        {% if response_data.status == 'success' %}
+            <p class="success">Success: {{ response_data.success_count }} users uploaded successfully.</p>
+        {% elif response_data.status == 'partial success with errors' %}
+            <p class="partial-success">Partial Success: {{ response_data.success_count }} users uploaded successfully.</p>
+            
+            {% if response_data.error_count > 0 %}
+                <p class="errors">Errors: {{ response_data.error_count }} rows failed to upload.</p>
+                <ul>
+                    {% for error in response_data.errors %}
+                        <li>Row {{ error.row_number }}: {{ error.error }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% else %}
+            <p class="errors">Error: {{ response_data.error }}</p>
+        {% endif %}
+        
+        <p><a href="/">Go back to the home page</a></p>
+    </div>
+</body>
+</html>
